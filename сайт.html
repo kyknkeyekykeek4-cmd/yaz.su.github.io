@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>язь.su — SAFE & UNIQUE</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background: #000; 
+            cursor: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org' width='64' height='64' style='font-size:32px'%3E%3Ctext y='35' x='0'%3E🐱‍🏍%3C/text%3E%3C/svg%3E") 16 16, auto;
+        }
+        #scroll-space { height: 1000000px; } /* Имитируем миллион пикселей высоты */
+        #view-port {
+            position: fixed; top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, 40px);
+            grid-template-rows: repeat(auto-fill, 40px);
+        }
+        .p { width: 40px; height: 40px; text-decoration: none; }
+        .p:hover { filter: brightness(2); outline: 1px solid #fff; z-index: 10; }
+        .w {
+            position: fixed; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            color: rgba(255,255,255,0.05);
+            font-size: 15vw; font-weight: 900;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="w">ЯЗЬ.SU</div>
+    <div id="scroll-space"></div>
+    <div id="view-port"></div>
+
+<script>
+    const bases = [
+        "scratch.mit.edu/projects/", 
+        "ru.wikipedia.org/wiki/", 
+        "://tv-incidents.fandom.com", 
+        "://youtube.com", 
+        "absurdopedia.net/wiki/",
+        "://tankionline.com",
+        "neal.fun/",
+        "://store.steampowered.com"
+    ];
+    
+    const port = document.getElementById('view-port');
+    
+    function draw() {
+        const offset = Math.floor(window.scrollY / 40);
+        const cols = Math.ceil(window.innerWidth / 40);
+        const rows = Math.ceil(window.innerHeight / 40);
+        const total = cols * rows;
+        
+        let html = '';
+        for (let i = 0; i < total; i++) {
+            const id = offset * cols + i; 
+            const base = bases[id % bases.length];
+            
+            // Генерируем уникальный хвост ссылки на основе позиции
+            // Так ссылки НИКОГДА не повторятся при скролле
+            const finalURL = base + (id + 123456); 
+            const hue = (id * 137) % 360;
+            
+            html += `<a href="https://${finalURL}" target="_blank" class="p" title="${finalURL}" style="background:hsl(${hue}, 75%, 45%)"></a>`;
+        }
+        port.innerHTML = html;
+    }
+
+    window.onscroll = draw;
+    window.onresize = draw;
+    draw();
+</script>
+</body>
+</html>
